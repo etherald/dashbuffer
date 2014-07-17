@@ -8,6 +8,7 @@
 
 ;; TODO: pass function from init file
 ;; TODO: should callback return a string?
+;; TODO: plugin type output modules
 ;; TODO: logging? append to buffer
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

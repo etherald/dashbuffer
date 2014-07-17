@@ -12,11 +12,7 @@
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq debug-on-error t)
-;;; if auto update true and when-idle true repeate update after idle
-;;; timeout
-;;; if auto update false and when-idle true update once after timeout
-;;; if auto update true and when-idle false update always after interval
-;;; if both false show info once, never update
+;;; should not switch to buffer on creation
 
 
 (defcustom dashbuffer-name "*Dashboard*"
@@ -34,12 +30,12 @@
   :group 'dashbuffer
   :type 'integer)
 
-(defcustom dashbuffer-auto-update t
+(defcustom dashbuffer-auto-update nil
   "Whether the dashbuffer should update on a timer."
   :group 'dashbuffer
   :type 'boolean)
 
-(defcustom dashbuffer-start-when-idle t
+(defcustom dashbuffer-start-when-idle nil
   "Whether to update the buffer only after Emacs has been idle for the specified time.
 Defaults to true. Otherwise the buffer will update after dashbuffer-update-interval has elapsed."
   :group 'dashbuffer
@@ -84,6 +80,8 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
   (buffer-disable-undo dashbuffer-itself)
   (set-window-dedicated-p (get-buffer-window dashbuffer-itself) t)
   (dashbuffer-update-once)
+  (if dashbuffer-auto-update
+      (dashbuffer-reset-timer))
   (fit-window-to-buffer (get-buffer-window dashbuffer-name))
   (shrink-window-if-larger-than-buffer (get-buffer-window dashbuffer-name)))
 

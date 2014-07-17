@@ -31,13 +31,13 @@
   :type 'integer)
 
 (defcustom dashbuffer-auto-update nil
-  "Whether the dashbuffer should update on a timer."
+  "Whether the dashbuffer should update on a timer or display only once."
   :group 'dashbuffer
   :type 'boolean)
 
 (defcustom dashbuffer-start-when-idle nil
   "Whether to update the buffer only after Emacs has been idle for the specified time.
-Defaults to true. Otherwise the buffer will update after dashbuffer-update-interval has elapsed."
+Defaults to true. Otherwise the buffer will update immediately."
   :group 'dashbuffer
   :type 'boolean)
 
@@ -50,7 +50,7 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
   "Make a working dashbuffer appear in the Emacs."
   (interactive)
   (if (buffer-live-p  dashbuffer-itself)
-      (pop-to-buffer dashbuffer-itself  nil t)
+      (pop-to-buffer dashbuffer-name  nil t)
     (dashbuffer-create))
   (if dashbuffer-start-when-idle
       (run-with-idle-timer dashbuffer-idle-interval t 'dashbuffer-update)))

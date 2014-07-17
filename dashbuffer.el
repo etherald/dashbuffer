@@ -60,8 +60,14 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
       (run-with-idle-timer dashbuffer-idle-interval t 'dashbuffer-update)))
 
 (defun dashbuffer-update ()
-  "Update buffer with newest info."
-;;  (interactive)
+  "Update buffer with newest info. And do it again if we're supposed to."
+  ;;  (interactive)
+  (dashbuffer-update-once)
+  (if dashbuffer-auto-update
+      (dashbuffer-reset-timer)))
+
+(defun dashbuffer-update-once ()
+  "Update the buffer just once."
   (with-local-quit
     ;;(undo-boundary)
     (save-selected-window
@@ -69,8 +75,7 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
       (dashbuffer-write-content dashbuffer-itself)
       (set-buffer-modified-p nil)
 ;;      (setq buffer-read-only t)
-      (if dashbuffer-auto-update
-          (dashbuffer-reset-timer)))))
+      )))
 
 (defun dashbuffer-create ()
   "Create the Dashbuffer."
@@ -78,10 +83,9 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
   (view-buffer dashbuffer-itself)
   (buffer-disable-undo dashbuffer-itself)
   (set-window-dedicated-p (get-buffer-window dashbuffer-itself) t)
-  (dashbuffer-update)
+  (dashbuffer-update-once)
   (fit-window-to-buffer (get-buffer-window dashbuffer-name))
-  (shrink-window-if-larger-than-buffer (get-buffer-window dashbuffer-name))
-  )
+  (shrink-window-if-larger-than-buffer (get-buffer-window dashbuffer-name)))
 
 (defun dashbuffer-kill-buffer ()
   "Kill the Dashbuffer."

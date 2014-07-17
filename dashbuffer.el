@@ -13,7 +13,7 @@
 ;;; TODO: logging? append to buffer
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+(setq debug-on-error t)
 ;;; if auto update true and when-idle true repeate update after idle
 ;;; timeout
 ;;; if auto update false andwhen-idle true update once after timeout
@@ -26,7 +26,7 @@
   :group 'dashbuffer
   :type 'string)
 
-(defcustom dashbuffer-update-interval 30
+(defcustom dashbuffer-update-interval 10
   "Interval in seconds between dashbuffer updates."
   :group 'dashbuffer
   :type 'integer)
@@ -47,15 +47,15 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
   :group 'dashbuffer
   :type 'boolean)
 
-;;; cache
+;;; cache ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar dashbuffer-timer nil)
 (defvar dashbuffer-itself nil)
 
 (defun dashbuffer ()
   (interactive)
-  (add-hook 'kill-buffer-hook 'dashbuffer-cleanup)
+;  (add-hook 'kill-buffer-hook 'dashbuffer-cleanup)
   (if (buffer-live-p  dashbuffer-itself)
-      (pop-to-buffer dashbuffer-name nil t)
+      (pop-to-buffer dashbuffer-itself  nil t)
     (dashbuffer-create))
   (if dashbuffer-start-when-idle
       (run-with-idle-timer dashbuffer-idle-interval t 'dashbuffer-update)))
@@ -65,8 +65,10 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
   (with-local-quit
     ;;(undo-boundary)
     (save-selected-window
+;;      (setq buffer-read-only nil)
       (dashbuffer-write-content dashbuffer-itself)
       (set-buffer-modified-p nil)
+;;      (setq buffer-read-only t)
       (if dashbuffer-auto-update
           (dashbuffer-reset-timer)))))
 
@@ -103,17 +105,19 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
         (run-at-time dashbuffer-update-interval nil 'dashbuffer-update)))
 
 (defun dashbuffer-cancel-timer ()
-  (if dashbuffer-timer
+  (if (dashbuffer-timer-exists)
       (progn
         (cancel-timer dashbuffer-timer)
         (setq dashbuffer-timer nil))))
 
+(defun dashbuffer-timer-exists ()
+  (memq dashbuffer-timer timer-list))
+
 (defun dashbuffer-write-line (str)
-  (interactive "s")
-  (set-buffer dashbuffer-itself)
+  (set-buffer dashbuffer-name)
   (setq buffer-read-only nil)
   ;;(princ (format "%s\n" str) dashbuffer-itself)
-  (princ str dashbuffer-itself)
+  (princ str (get-buffer dashbuffer-name))
   (setq buffer-modified-p nil)
   (setq buffer-read-only t))
 
@@ -122,7 +126,7 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
   (require 'solar)
   ;;(set-buffer buf)
   (set-buffer dashbuffer-itself)
-  ;;(setq buffer-read-only nil)
+  (setq buffer-read-only nil)
   (erase-buffer)
   (progn
     (dashbuffer-write-line
@@ -140,5 +144,5 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
          (format "Your lucky number for the next %d seconds is %d\n" dashbuffer-update-interval (random))))
     )
 
-                                        ;(setq buffer-read-only t)
+  (setq buffer-read-only t)
   )

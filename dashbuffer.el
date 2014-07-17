@@ -8,9 +8,6 @@
 
 ;;; TODO: rationalize update options
 ;;; TODO: pass function from init file
-;;; TODO: should callback return a string?
-;;; TODO: plugin type output modules
-;;; TODO: logging? append to buffer
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq debug-on-error t)
@@ -26,7 +23,7 @@
   :group 'dashbuffer
   :type 'string)
 
-(defcustom dashbuffer-update-interval 10
+(defcustom dashbuffer-update-interval 30
   "Interval in seconds between dashbuffer updates."
   :group 'dashbuffer
   :type 'integer)
@@ -125,7 +122,7 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
   ;;(require 'calendar)
   (require 'solar)
   ;;(set-buffer buf)
-  (set-buffer dashbuffer-itself)
+  (set-buffer (get-buffer dashbuffer-name))
   (setq buffer-read-only nil)
   (erase-buffer)
   (progn
@@ -142,7 +139,8 @@ Defaults to true. Otherwise the buffer will update after dashbuffer-update-inter
     (if dashbuffer-auto-update
         (dashbuffer-write-line
          (format "Your lucky number for the next %d seconds is %d\n" dashbuffer-update-interval (random))))
+    (dashbuffer-write-line (yow))
     )
-
+  (goto-char 0)
   (setq buffer-read-only t)
   )

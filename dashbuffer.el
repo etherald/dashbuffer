@@ -95,6 +95,10 @@ Defaults to true. Otherwise the buffer will update immediately."
   (setq dashbuffer-itself nil)
   (setq dashbuffer-timer nil))
 
+(defun refresh-dashbuffer ()
+  (interactive)
+  (dashbuffer-update))
+
 (defun kill-dashbuffer ()
   "Kill the Dashbuffer interactively."
   (interactive)
@@ -105,6 +109,11 @@ Defaults to true. Otherwise the buffer will update immediately."
   (interactive)
   (quit-window nil (get-buffer-window dashbuffer-itself))
   (bury-buffer dashbuffer-itself))
+
+(defun shrink-dashbuffer ()
+  (interactive)
+  (fit-window-to-buffer (get-buffer-window dashbuffer-name))
+  (shrink-window-if-larger-than-buffer (get-buffer-window dashbuffer-name)))
 
 (defun dashbuffer-reset-timer ()
   "Reset and restart dashbuffer's timer."

@@ -7,7 +7,6 @@
 ;;; (load "~/elisp/dashbuffer.el")
 ;;; (add-hook 'before-make-frame-hook 'dashbuffer)
 
-;;; TODO: rationalize update options
 ;;; TODO: pass function from init file
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

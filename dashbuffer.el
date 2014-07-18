@@ -68,7 +68,8 @@ Defaults to true. Otherwise the buffer will update immediately."
 ;;      (setq buffer-read-only nil)
       (dashbuffer-write-content dashbuffer-itself)
       (set-buffer-modified-p nil)
-;;      (setq buffer-read-only t)
+      ;;      (setq buffer-read-only t)
+      ;;(shrink-dashbuffer)
       )))
 
 (defun dashbuffer-create ()
@@ -76,8 +77,8 @@ Defaults to true. Otherwise the buffer will update immediately."
   (setq dashbuffer-itself (get-buffer-create dashbuffer-name))
   ;;(display-buffer dashbuffer-name)
   (pop-to-buffer dashbuffer-name)
-  (view-buffer dashbuffer-name)
-  (buffer-disable-undo dashbuffer-itself)
+  (view-buffer dashbuffer-itself)
+  (buffer-disable-undo dashbuffer-name)
   (set-window-dedicated-p (get-buffer-window dashbuffer-itself) t)
   (dashbuffer-update-once)
   (if dashbuffer-auto-update
@@ -116,7 +117,7 @@ Defaults to true. Otherwise the buffer will update immediately."
   (quit-window nil (get-buffer-window dashbuffer-itself))
   (bury-buffer dashbuffer-itself))
 
-(defun shrink-dashbuffer ()
+(defun shrink-dashbuffer-window ()
   (interactive)
   (fit-window-to-buffer (get-buffer-window dashbuffer-name))
   (shrink-window-if-larger-than-buffer (get-buffer-window dashbuffer-name)))
@@ -172,5 +173,4 @@ Defaults to true. Otherwise the buffer will update immediately."
     (dashbuffer-write-line (yow))
     )
   (goto-char 0)
-  (setq buffer-read-only t)
-  )
+  (setq buffer-read-only t))

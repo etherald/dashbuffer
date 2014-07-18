@@ -47,7 +47,7 @@ Defaults to true. Otherwise the buffer will update immediately."
 (defun dashbuffer ()
   "Make a working dashbuffer appear in the Emacs."
   (interactive)
-  (if (and dashbuffer-itself (buffer-live-p  dashbuffer-itself))
+  (if (get-buffer dashbuffer-name)
       (pop-to-buffer dashbuffer-name  nil t)
     (dashbuffer-create))
   (if dashbuffer-start-when-idle
@@ -74,7 +74,8 @@ Defaults to true. Otherwise the buffer will update immediately."
 
 (defun dashbuffer-create ()
   "Create the Dashbuffer."
-  (setq dashbuffer-itself (get-buffer-create dashbuffer-name))
+  (setq dashbuffer-itself
+        (get-buffer-create dashbuffer-name))
   ;;(display-buffer dashbuffer-name)
   (pop-to-buffer dashbuffer-name)
   (view-buffer dashbuffer-itself)
@@ -170,7 +171,6 @@ Defaults to true. Otherwise the buffer will update immediately."
     (if dashbuffer-auto-update
         (dashbuffer-write-line
          (format "Your lucky number for the next %d seconds is %d\n" dashbuffer-update-interval (random))))
-    (dashbuffer-write-line (yow))
-    )
+    (dashbuffer-write-line (yow)))
   (goto-char 0)
   (setq buffer-read-only t))

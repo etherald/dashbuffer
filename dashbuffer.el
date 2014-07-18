@@ -47,7 +47,9 @@ Defaults to true. Otherwise the buffer will update immediately."
   "Make a working dashbuffer appear in the Emacs."
   (interactive)
   (if (get-buffer dashbuffer-name)
-      (pop-to-buffer dashbuffer-name  nil t)
+      (progn
+        (pop-to-buffer dashbuffer-name)
+        (dashbuffer-setup))
     (dashbuffer-create))
   (if dashbuffer-start-when-idle
       (run-with-idle-timer dashbuffer-idle-interval t 'dashbuffer-update)))
@@ -74,7 +76,9 @@ Defaults to true. Otherwise the buffer will update immediately."
 (defun update-dashbuffer ()
   "Update the buffer interactively."
   (interactive)
-  (dashbuffer-update-once))
+  (if (get-buffer dashbuffer-name)
+      (dashbuffer-update-once)
+    (message (format "There is no buffer %s" dashbuffer-name))))
 
 (defun dashbuffer-create ()
   "Create the Dashbuffer."
@@ -82,14 +86,22 @@ Defaults to true. Otherwise the buffer will update immediately."
         (get-buffer-create dashbuffer-name))
   ;;(display-buffer dashbuffer-name)
   (pop-to-buffer dashbuffer-name)
+  (dashbuffer-setup)
+  )
+
+(defun dashbuffer-setup ()
   (view-buffer dashbuffer-itself)
   (buffer-disable-undo dashbuffer-name)
   (set-window-dedicated-p (get-buffer-window dashbuffer-itself) t)
   (dashbuffer-update-once)
   (if dashbuffer-auto-update
       (dashbuffer-reset-timer))
-  (fit-window-to-buffer (get-buffer-window dashbuffer-name))
-  (shrink-window-if-larger-than-buffer (get-buffer-window dashbuffer-name)))
+  ;; (fit-window-to-buffer (get-buffer-window dashbuffer-name))
+  ;; (shrink-window-if-larger-than-buffer (get-buffer-window
+  ;; dashbuffer-name))
+  (shrink-dashbuffer-window)
+
+  )
 
 (defun dashbuffer-kill-buffer ()
   "Kill the Dashbuffer."

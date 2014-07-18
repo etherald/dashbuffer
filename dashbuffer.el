@@ -104,6 +104,12 @@ Defaults to true. Otherwise the buffer will update immediately."
   (interactive)
   (dashbuffer-kill-buffer))
 
+(defun kill-dashbuffer-delete-window ()
+  "Kill the Dashbuffer and close its window."
+  (interactive)
+  (delete-window (get-buffer-window dashbuffer-name))
+  (kill-dashbuffer))
+
 (defun bury-dashbuffer ()
   "Bury Alive the Dashbuffer."
   (interactive)

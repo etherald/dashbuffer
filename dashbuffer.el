@@ -11,7 +11,7 @@
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq debug-on-error t)
-
+(setq dashbuffer-start-when-idle t)
 (defcustom dashbuffer-name "*Dashboard*"
   "Name for the dashbuffer buffer."
   :group 'dashbuffer
@@ -32,7 +32,7 @@
   :group 'dashbuffer
   :type 'boolean)
 
-(defcustom dashbuffer-start-when-idle nil
+(defcustom dashbuffer-start-when-idle t
   "Whether to update the buffer only after Emacs has been idle for the specified time.
 Defaults to true. Otherwise the buffer will update immediately."
   :group 'dashbuffer
@@ -70,6 +70,11 @@ Defaults to true. Otherwise the buffer will update immediately."
       ;;      (setq buffer-read-only t)
       ;;(shrink-dashbuffer)
       )))
+
+(defun update-dashbuffer ()
+  "Update the buffer interactively."
+  (interactive)
+  (dashbuffer-update-once))
 
 (defun dashbuffer-create ()
   "Create the Dashbuffer."

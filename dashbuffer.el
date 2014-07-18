@@ -12,8 +12,6 @@
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq debug-on-error t)
-;;; should not switch to buffer on creation
-
 
 (defcustom dashbuffer-name "*Dashboard*"
   "Name for the dashbuffer buffer."

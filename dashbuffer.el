@@ -75,7 +75,8 @@ Defaults to true. Otherwise the buffer will update immediately."
 
 (defun dashbuffer-create ()
   "Create the Dashbuffer."
-  (setq dashbuffer-itself (pop-to-buffer dashbuffer-name))
+  (setq dashbuffer-itself
+        (display-buffer dashbuffer-name))
   (view-buffer dashbuffer-itself)
   (buffer-disable-undo dashbuffer-itself)
   (set-window-dedicated-p (get-buffer-window dashbuffer-itself) t)
@@ -85,7 +86,7 @@ Defaults to true. Otherwise the buffer will update immediately."
   (fit-window-to-buffer (get-buffer-window dashbuffer-name))
   (shrink-window-if-larger-than-buffer (get-buffer-window dashbuffer-name)))
 
-(defun dashbuffer-kill-buffer ()
+(defun dashbuffer-kill-buoffer ()
   "Kill the Dashbuffer."
   (kill-buffer dashbuffer-name))
 
